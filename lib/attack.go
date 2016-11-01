@@ -234,6 +234,7 @@ func (a *Attacker) hit(tr Targeter, tm time.Time) *Result {
 		return &res
 	}
 
+	res.Id = tgt.Id
 	req, err := tgt.Request()
 	if err != nil {
 		return &res

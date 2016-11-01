@@ -17,6 +17,7 @@ import (
 
 // Target is an HTTP request blueprint.
 type Target struct {
+	Id     int
 	Method string
 	URL    string
 	Body   []byte
