@@ -3,8 +3,6 @@ package vegeta
 import (
 	"crypto/tls"
 	"fmt"
-	"io"
-	"io/ioutil"
 	"net"
 	"net/http"
 	"strings"
@@ -12,6 +10,7 @@ import (
 	"time"
 
 	"golang.org/x/net/http2"
+	"io/ioutil"
 )
 
 // Attacker is an attack executor which wraps an http.Client
@@ -250,7 +249,11 @@ func (a *Attacker) hit(tr Targeter, tm time.Time) *Result {
 	}
 	defer r.Body.Close()
 
-	in, err := io.Copy(ioutil.Discard, r.Body)
+	res.Body, err = ioutil.ReadAll(r.Body)
+	in := len(res.Body)
+	if err != nil {
+		return &res
+	}
 	if err != nil {
 		return &res
 	}
