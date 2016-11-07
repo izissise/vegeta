@@ -250,14 +250,10 @@ func (a *Attacker) hit(tr Targeter, tm time.Time) *Result {
 	defer r.Body.Close()
 
 	res.Body, err = ioutil.ReadAll(r.Body)
-	in := len(res.Body)
 	if err != nil {
 		return &res
 	}
-	if err != nil {
-		return &res
-	}
-	res.BytesIn = uint64(in)
+	res.BytesIn = uint64(len(res.Body))
 
 	if req.ContentLength != -1 {
 		res.BytesOut = uint64(req.ContentLength)
