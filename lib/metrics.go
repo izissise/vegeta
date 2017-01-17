@@ -55,6 +55,8 @@ type (
 		P95 time.Duration `json:"95th"`
 		// P99 is the 99th percentile request latency.
 		P99 time.Duration `json:"99th"`
+		// Min is the minimum observed request latency.
+		Min time.Duration `json:"min"`
 		// Max is the maximum observed request latency.
 		Max time.Duration `json:"max"`
 	}
@@ -91,6 +93,12 @@ func (m *Metrics) Add(r *Result) {
 
 	if end := r.End(); end.After(m.End) {
 		m.End = end
+	}
+
+	if m.Latencies.Min == 0 {
+		m.Latencies.Min = r.Latency
+	} else if r.Latency < m.Latencies.Min {
+		m.Latencies.Min = r.Latency
 	}
 
 	if r.Latency > m.Latencies.Max {
